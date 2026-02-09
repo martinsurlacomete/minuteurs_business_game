@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Message & Minuteur</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 60px;
+      background: #f7f7f7;
+    }
+    h1 {
+      font-size: 2.5em;
+    }
+    #timer {
+      font-size: 3em;
+      margin-top: 30px;
+      color: #d63031;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="message">⏳ Chargement...</h1>
+  <div id="timer"></div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    const message = params.get("message") || "🎉 Bienvenue !";
+    const duration = parseInt(params.get("time")) || 300; // secondes
+
+    document.getElementById("message").textContent = message;
+
+    let time = duration;
+    const timerElement = document.getElementById("timer");
+
+    function updateTimer() {
+      const minutes = Math.floor(time / 60);
+      const seconds = time % 60;
+      timerElement.textContent =
+        String(minutes).padStart(2, '0') + ":" +
+        String(seconds).padStart(2, '0');
+      time--;
+
+      if (time < 0) {
+        timerElement.textContent = "⏱ Temps écoulé";
+        clearInterval(interval);
+      }
+    }
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+  </script>
+
+</body>
+</html>
