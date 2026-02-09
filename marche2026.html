@@ -37,8 +37,8 @@
     }
 
     h1 {
-      font-size: 1.4rem;
-      font-weight: 600;
+      font-size: 0.7rem;
+      font-weight: 300;
       line-height: 1.4;
       margin-bottom: 20px;
     }
@@ -52,15 +52,13 @@
 
     .btn {
       display: inline-block;
-      background: linear-gradient(135deg, #6c5ce7, #00cec9);
-      color: white;
+      color: blue;
       border: none;
       border-radius: 999px;
       padding: 14px 26px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 6px 16px rgba(108, 92, 231, 0.35);
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
@@ -88,7 +86,7 @@
     const params = new URLSearchParams(window.location.search);
 
     const message = params.get("message") || 
-      "Le secteur de l’automobile est particulièrement émetteur de CO2. Les constructeurs automobiles sont ciblés prioritairement par les pouvoirs publics. En 2025, plusieurs clients constructeurs ont sollicité Céchola pour fournir l’impact carbone de ses produits. Les collaborateurs insistent également pour calculer l’impact carbone de l’entreprise.";
+      "Le secteur de l’automobile est particulièrement émetteur de CO2. Les constructeurs automobiles sont ciblés prioritairement par les pouvoirs publics. En 2025, plusieurs clients constructeurs ont sollicité Céchola pour fournir l’impact carbone de ses produits (Analyse de Cycle de Vie).  Les collaborateurs insistent également pour calculer l’impact carbone de l’entreprise (Bilan Carbone).  Le responsable QSE est sollicité par la direction pour fournir ces informations. Vous devez répondre rapidement à sa sollicitation. ";
 
     const duration = parseInt(params.get("time")) || 600;
 
