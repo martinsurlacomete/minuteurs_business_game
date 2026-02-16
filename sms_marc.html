@@ -109,7 +109,7 @@
     },
     {
       options: [
-        { expected: ["chauffeurs de bus"], response: "Bien vu, ils vont pouvoir gérer l'évacuation. Ils ne sont que 4... Que doivent-ils évacuer en priorité ? Communiquez-moi 4 éléments de votre choix." }
+        { expected: ["chauffeurs"], response: "Bien vu, ils vont pouvoir gérer l'évacuation. Ils ne sont que 4... Que doivent-ils évacuer en priorité ? Communiquez-moi 4 éléments de votre choix." }
       ]
     },
     {
@@ -141,7 +141,7 @@
       options: [
         { expected: ["nageurs"], response: "Pas sûr que ce leur soit utile... Mais allons-y." },
         { expected: ["employés"], response: "La hauteur de la tour devrait suffire pour les protéger, non ?" },
-        { expected: ["travailleurs"], response: "J'envoie en urgence quelqu'un chercher les bouées !" }
+        { expected: ["usine"], response: "J'envoie en urgence quelqu'un leur apporter les bouées !" }
       ],
       intermediate: ["La vague va bientôt passer... La majorité des habitants n'y sont pas exposés, et ceux qui restent y sont désormais beaucoup moins vulnérables, grâce aux bouées que vous leur avez fournies."],
       intermediate: ["Bravo à tous."],
@@ -151,18 +151,13 @@
       options: [
         { expected: ["hôtels"], response: "Les hôtels de la colline sont une bonne solution temporaire, réquisitionnons-les." }
       ],
-      intermediate: ["En attendant, je vous laisse trouver de quoi nourrir vos concitoyens."]
+      intermediate: ["En attendant, il faut trouver de quoi nourrir vos concitoyens. La seule route d'accès au supermarché est complètement inondée et impraticable..."]
     },
     {
       options: [
-        { expected: ["supermarché"], response: "Le supermarché est totalement inondé, toute la nourriture est perdue..." }
+        { expected: ["supermarché + cargo"], response: "Ca va coûter cher, mais a-t-on le choix ? Allons-y pour approvisionner la ville par bateau." }
       ],
-      intermediate: ["Trouvez une alternative temporaire pour approvisionner la ville en nourriture."]
-    },
-    {
-      options: [
-        { expected: ["supermarché voisin + cargo"], response: "Ca va coûter cher, mais a-t-on le choix ? Allons-y pour approvisionner la ville par bateau." }
-      ]
+      intermediate: ["Bravo, vous avez limité les dégâts ! Mais je vous rassure : il y a de quoi faire pour être plus préparés, si une prochaine comète vous tombe dessus..."]
     }
   ];
 
@@ -194,7 +189,7 @@
     messagesEl.appendChild(userMsg);
 
     if(step >= scenario.length) {
-      sendBotMessage("Bien joué ! Tout le monde est au chaud !");
+      sendBotMessage("L'aventure est terminée !");
       input.value = "";
       return;
     }
