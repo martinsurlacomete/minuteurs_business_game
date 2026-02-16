@@ -74,7 +74,8 @@
   <div class="messages" id="messages">
     <div class="bot message">
       Communiquez avec moi en m'envoyant des mots-clés.<br>
-      Les mots-clés qui peuvent être utilisés sont qui apparaissent en rouge, quand vous scannez les éléments de la carte. Envoyez-les moi à l'identique par message, au bon moment.<br>
+      <br>
+      Les mots-clés qui peuvent être utilisés sont ceux qui apparaissent en rouge, quand vous scannez les éléments de la carte. Envoyez-les moi à l'identique par message, au bon moment.<br>
       Pour combiner plusieurs mots, écrivez "mot1+mot2" (sans espaces).<br>
       Par exemple, une consigne comme "emmener les enfants à la plage" s'écrirait "enfants+plage".<br>
       <br>
@@ -104,7 +105,7 @@
     },
     {
       options: [
-        { expected: ["digue + hélicoptère + emplacement"], response: "Ok, on va faire déplacer cette digue en hélico !" },
+        { expected: ["digue+hélicoptère+emplacement"], response: "Ok, on va faire déplacer cette digue en hélico !" },
       ]
     },
     {
@@ -155,7 +156,7 @@
     },
     {
       options: [
-        { expected: ["supermarché + cargo"], response: "Ca va coûter cher, mais a-t-on le choix ? Allons-y pour approvisionner la ville par bateau." }
+        { expected: ["supermarché+cargo"], response: "Ca va coûter cher, mais a-t-on le choix ? Allons-y pour approvisionner la ville par bateau." }
       ],
       intermediate: ["Bravo, vous avez limité les dégâts ! Mais je vous rassure : il y a de quoi faire pour être plus préparés, si une prochaine comète vous tombe dessus..."]
     }
