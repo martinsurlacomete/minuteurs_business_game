@@ -103,7 +103,7 @@
       // Étape multi : il faut entrer les deux réponses pour passer
       options: [
         { expected: ["digue + hélicoptère + emplacement"], response: "Ok, on va faire déplacer cette digue en hélico !" },
-        { expected: ["chauffeurs de bus"], response: "Bien vu, mais ils ne sont que 3. Que doivent-ils prendre en priorité ?" }
+        { expected: ["chauffeurs de bus"], response: "Bien vu, mais ils ne sont que 4. Que doivent-ils prendre en priorité ?" }
       ],
       multi: true // indique que toutes les réponses doivent être collectées
     },
@@ -115,62 +115,50 @@
         { expected: ["banque"], response: "J'envoie un camion prendre les sous." }
         { expected: ["animaux"], response: "Vous avez raison, un chauffeur va passer au zoo." }
         { expected: ["statue"], response: "Ce monument est historique, c'est vrai. J'envoie quelqu'un le récupérer." }
+      ],
+      multi: true,
+      threshold: 4, // l'étape est validée après 4 réponses correctes
+      intermediate: ["⚠️ Il reste quelques réponses à fournir pour valider cette étape."]
+    },
+    {
+      options: [
+        { expected: ["colline"], response: "Que voulez-vous que je fasse avec ces bouées ?" },
+      ]
+    },
+    {
+      options: [
+        { expected: ["bouées"], response: "Que voulez-vous que je fasse avec ces bouées ?" },
+      ]
+    },
+    {
+      options: [
+        { expected: ["usine"], response: "Bien vu, elles rendront le personnel moins vulnérable. J'envoie quelqu'un." },
       ]
     }
+    
   ];
 
-  function sendMessage() {
-    const input = document.getElementById("userInput");
-    const text = input.value.trim().toLowerCase();
-    if(text === "") return;
-
-    const userMsg = document.createElement("div");
-    userMsg.className = "message user";
-    userMsg.textContent = text;
-    messagesEl.appendChild(userMsg);
-
-    const botMsg = document.createElement("div");
-    botMsg.className = "message bot";
-
-    if(step < scenario.length) {
-      const currentStep = scenario[step];
-      const match = currentStep.options.find(opt => opt.expected.includes(text));
-
-      if(currentStep.multi) {
-        // Étape multi : collecter toutes les réponses
-        if(match && !collected.includes(text)) {
-          collected.push(text);
-          botMsg.textContent = match.response;
-
-          // Si toutes les réponses de l'étape ont été données → passer à la prochaine étape
-          if(collected.length === currentStep.options.length) {
-            collected = [];
-            step++;
-          }
-        } else if(collected.includes(text)) {
-          botMsg.textContent = "❌ Vous avez déjà donné cette réponse.";
-        } else {
-          botMsg.textContent = "❌ Ce choix n’est pas valide pour cette étape.";
-        }
-      } else {
-        // Étape normale
-        if(match) {
-          botMsg.textContent = match.response;
-          step++;
-        } else {
-          botMsg.textContent = "❌ Ce n’est pas le bon moment pour cette décision.";
-        }
+  function sendMessage() if(currentStep.multi) {
+    if(match && !collected.includes(text)) {
+      collected.push(text);
+      sendBotMessage(match.response);
+  
+      // Validation selon threshold
+      const validCount = collected.length;
+      const threshold = currentStep.threshold || currentStep.options.length;
+  
+      if(validCount >= threshold) {
+        collected = [];
+        step++;
+        showIntermediate(step); // messages intermédiaires après validation
       }
+    } else if(collected.includes(text)) {
+      sendBotMessage("❌ Vous avez déjà donné cette réponse.");
     } else {
-      botMsg.textContent = "✅ Vous avez terminé le scénario !";
+      sendBotMessage("❌ Ce choix n’est pas valide pour cette étape.");
     }
-
-    messagesEl.appendChild(botMsg);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-
-    input.value = "";
-    input.focus();
   }
+
 
   document.getElementById("userInput").addEventListener("keypress", function(e) {
     if(e.key === "Enter") sendMessage();
