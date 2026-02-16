@@ -41,76 +41,63 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      transition: opacity 0.3s;
     }
 
-    .primary {
-      background: #007bff;
-      color: white;
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
     }
 
-    .secondary {
-      background: #28a745;
-      color: white;
-    }
+    .primary { background: #007bff; color: white; }
+    .secondary { background: #28a745; color: white; }
+    .neutral { background: #6c757d; color: white; }
 
-    .neutral {
-      background: #6c757d;
-      color: white;
-    }
-
-    .back {
-      background: #ff9800;
-      color: white;
-      margin-top: 20px;
+    .chosen {
+      opacity: 1 !important;
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
 
-  <div class="container" id="menu">
+  <div class="container">
     <h1>Que décidez-vous de faire ?</h1>
 
-    <button class="primary" onclick="showResult('eviter')">
+    <button class="primary" onclick="choose(this, 'eviter')">
       Éviter l’impact
     </button>
 
-    <button class="secondary" onclick="showResult('deplacer')">
+    <button class="secondary" onclick="choose(this, 'deplacer')">
       Déplacer les habitants
     </button>
 
-    <button class="neutral" onclick="showResult('boulot')">
+    <button class="neutral" onclick="choose(this, 'boulot')">
       Je retourne au boulot
     </button>
   </div>
 
-  <div class="container" id="result" style="display:none;">
-    <p id="message"></p>
-    <button class="back" onclick="goBack()">Retour</button>
-  </div>
+  <!-- Audios -->
+  <audio id="audio-eviter" src="eviter.mp3"></audio>
+  <audio id="audio-deplacer" src="deplacer.mp3"></audio>
+  <audio id="audio-boulot" src="boulot.mp3"></audio>
 
   <script>
-    function showResult(choice) {
-      const message = document.getElementById("message");
+    function choose(clickedButton, choice) {
+      const buttons = document.querySelectorAll("button");
 
-      if (choice === "eviter") {
-        message.textContent = "Vous choisissez d’éviter l’impact en modifiant la trajectoire.";
-      }
+      // Désactiver tous les boutons sauf celui cliqué
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn === clickedButton) {
+          btn.classList.add("chosen");
+          btn.disabled = false;
+        }
+      });
 
-      if (choice === "deplacer") {
-        message.textContent = "Vous décidez de déplacer les habitants pour limiter les conséquences.";
-      }
-
-      if (choice === "boulot") {
-        message.textContent = "Vous retournez au boulot en espérant que tout ira bien.";
-      }
-
-      document.getElementById("menu").style.display = "none";
-      document.getElementById("result").style.display = "block";
-    }
-
-    function goBack() {
-      document.getElementById("result").style.display = "none";
-      document.getElementById("menu").style.display = "block";
+      // Lancer l'audio correspondant
+      const audio = document.getElementById("audio-" + choice);
+      audio.play();
     }
   </script>
 
