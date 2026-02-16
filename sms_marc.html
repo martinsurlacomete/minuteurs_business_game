@@ -100,7 +100,8 @@
     {
       options: [
         { expected: ["digue + hélicoptère + emplacement"], response: "Ok, on va faire déplacer cette digue en hélico !" },
-        { expected: ["chauffeurs de bus"], response: "Bien vu, mais ils ne sont que 4. Que doivent-ils prendre en priorité ?" }
+        { expected: ["digue"], response: "Ok, une digue déplaçable, mais... vous n'avez pas de consignes supplémentaires ?" },
+        { expected: ["chauffeurs de bus"], response: "Bien vu, ils vont pouvoir gérer l'évacuation. Ils ne sont que 4... Que doivent-ils évacuer en priorité ? Communiquez-moi 4 éléments." }
       ]
     },
     {
@@ -120,7 +121,7 @@
       options: [
         { expected: ["colline"], response: "C'est noté. La-bas, ils ne seront pas exposés." },
       ],
-      intermediate: ["Les chauffeurs de bus me disent que certains n'ont pas réussi à rejoindre le point de ralliement. C'est le cas des nageurs, du personnel de la Tour, et des travailleurs de l'usine. Ils n'auront pas le temps d'évacuer, il faut les aider !"]
+      intermediate: ["Certains habitants n'ont pas réussi à rejoindre le point de ralliement. C'est le cas des nageurs, du personnel de la Tour, et des travailleurs de l'usine. Ils n'auront pas le temps d'évacuer, il faut les aider !"]
     },
     {
       options: [
