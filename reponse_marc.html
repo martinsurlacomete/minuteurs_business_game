@@ -52,6 +52,7 @@
     .primary { background: #007bff; color: white; }
     .secondary { background: #28a745; color: white; }
     .neutral { background: #6c757d; color: white; }
+    .link-btn { background: #ff9800; color: white; }
 
     .chosen {
       opacity: 1 !important;
@@ -61,24 +62,24 @@
 </head>
 <body>
 
-  <div class="container">
-    <h1>Que décidez-vous de faire ?</h1>
+  <div class="container" id="main-container">
+    <h1>Que souhaitez-vous répondre à Marc ?</h1>
 
     <button class="primary" onclick="choose(this, 'eviter')">
-      Éviter l’impact
+      Eviter l’impact, comment ? Vous pouvez le dévier ?
     </button>
 
     <button class="secondary" onclick="choose(this, 'deplacer')">
-      Déplacer les habitants
+      Reçu, on déplace tous les habitants ! 
     </button>
 
     <button class="neutral" onclick="choose(this, 'boulot')">
-      Je retourne au boulot
+      J’ai du mal à vous croire ! J’ai du boulot moi, j’y retourne ! 
     </button>
   </div>
 
   <!-- Audios -->
-  <audio id="audio-eviter" src="eviter.mp3"></audio>
+  <audio id="audio-eviter" src="audio_2_marc.mp3"></audio>
   <audio id="audio-deplacer" src="deplacer.mp3"></audio>
   <audio id="audio-boulot" src="boulot.mp3"></audio>
 
@@ -98,6 +99,20 @@
       // Lancer l'audio correspondant
       const audio = document.getElementById("audio-" + choice);
       audio.play();
+
+      // Si c'est le bouton "Eviter", créer un nouveau bouton pour rediriger
+      if(choice === 'eviter') {
+        const container = document.getElementById("main-container");
+
+        const linkButton = document.createElement("button");
+        linkButton.className = "link-btn";
+        linkButton.textContent = "Accéder à la conversation avec Marc";
+        linkButton.onclick = function() {
+          window.location.href = "https://exemple.com"; // <-- remplace par ton lien
+        };
+
+        container.appendChild(linkButton);
+      }
     }
   </script>
 
