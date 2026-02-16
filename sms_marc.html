@@ -173,14 +173,18 @@
       if(match && !collected.includes(text)) {
         collected.push(text);
         sendBotMessage(match.response);
-
+    
         const validCount = collected.length;
         const threshold = currentStep.threshold || currentStep.options.length;
-
+    
         if(validCount >= threshold) {
+          // Affiche le message intermédiaire AVANT de passer à l'étape suivante
+          if(currentStep.intermediate) {
+            currentStep.intermediate.forEach(msg => sendBotMessage(msg));
+          }
+    
           collected = [];
-          step++;
-          showIntermediate(step);
+          step++; // passe à l'étape suivante
         }
       } else if(collected.includes(text)) {
         sendBotMessage("❌ Vous avez déjà donné cette réponse.");
@@ -190,8 +194,13 @@
     } else {
       if(match) {
         sendBotMessage(match.response);
+      
+        // Affiche le message intermédiaire AVANT de passer à l'étape suivante
+        if(currentStep.intermediate) {
+          currentStep.intermediate.forEach(msg => sendBotMessage(msg));
+        }
+      
         step++;
-        showIntermediate(step);
       } else {
         sendBotMessage("❌ Ce n’est pas le bon moment pour cette décision.");
       }
