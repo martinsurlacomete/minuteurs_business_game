@@ -70,73 +70,98 @@
 </head>
 <body>
 
-  <div class="chat-container">
-    <div class="messages" id="messages">
-      <div class="bot message">
-        Communiquez-moi les bons mots que vous trouverez en scannant les éléments de la carte (choisissez ceux en rouge). 
-        Commencez par me transmettre le mot correspondant à la zone d'impact.
-      </div>
-    </div>
-
-    <div class="input-container">
-      <input type="text" id="userInput" placeholder="Écrire un message...">
-      <button onclick="sendMessage()">Envoyer</button>
+<div class="chat-container">
+  <div class="messages" id="messages">
+    <div class="bot message">
+      Communiquez-moi les bons mots que vous trouverez en scannant les éléments de la carte (choisissez ceux en rouge). 
+      Commencez par me transmettre le mot correspondant à la zone d'impact.
     </div>
   </div>
 
-  <script>
-    const messagesEl = document.getElementById("messages");
+  <div class="input-container">
+    <input type="text" id="userInput" placeholder="Écrire un message...">
+    <button onclick="sendMessage()">Envoyer</button>
+  </div>
+</div>
 
-    // Scénario étape par étape
-    let step = 0;
+<script>
+  const messagesEl = document.getElementById("messages");
 
-    const scenario = [
-      { expected: ["eaux profondes"], response: "C'est le meilleur endroit, je suis d'accord avec vous. La comète va être déviée ici, mais elle créera une vague puissante qui inondera la ville. Communiquez-moi davantage d'instructions pour que l'on vous protège de cette submersion." },
-      { expected: ["digue + hélicoptère + emplacement"], response: "Ok, on va faire déplacer cette digue en hélico, ça devrait être rapide !" },
-      { expected: ["chauffeurs de bus"], response: "Bien vu, mais ils ne sont que 3. Que doivent-ils prendre en priorité ?" },
-      { expected: ["enfants"], response: "Oui, bien sûr, c'est vital : on prend les enfants en premier." },
-      { expected: ["maison de retraite"], response: "Les personnes âgées sont très vulnérables, sauvons-les." },
-      { expected: ["musée"], response: "Ces éléments sont très précieux, on les prend." },
-      { expected: ["point de ralliement"], response: "Il y a beaucoup de personnes en route vers le point de ralliement. J'envoie un chauffeur." },
-      { expected: ["bite"], response: "Bah alors coquin, c'est pas le moment !" }
-    ];
+  // Scénario par étapes, chaque étape peut avoir plusieurs réponses possibles
+  let step = 0;
 
-    function sendMessage() {
-      const input = document.getElementById("userInput");
-      const text = input.value.trim().toLowerCase();
-      if(text === "") return;
+  const scenario = [
+    {
+      options: [
+        { expected: ["eaux profondes"], response: "C'est le meilleur endroit, je suis d'accord avec vous. La comète va être déviée ici, mais elle créera une vague puissante qui inondera la ville. Communiquez-moi davantage d'instructions pour que l'on vous protège de cette submersion." }
+      ]
+    },
+    {
+      options: [
+        { expected: ["digue + hélicoptère + emplacement"], response: "Ok, on va faire déplacer cette digue en hélico, ça devrait être rapide !" },
+        { expected: ["chauffeurs de bus"], response: "Bien vu, mais ils ne sont que 3. Que doivent-ils prendre en priorité ?" }
+      ]
+    },
+    {
+      options: [
+        { expected: ["enfants"], response: "Oui, bien sûr, c'est vital : on prend les enfants en premier." },
+        { expected: ["maison de retraite"], response: "Les personnes âgées sont très vulnérables, sauvons-les." }
+      ]
+    },
+    {
+      options: [
+        { expected: ["musée"], response: "Ces éléments sont très précieux, on les prend." },
+        { expected: ["point de ralliement"], response: "Il y a beaucoup de personnes en route vers le point de ralliement. J'envoie un chauffeur." }
+      ]
+    },
+    {
+      options: [
+        { expected: ["bite"], response: "Bah alors coquin, c'est pas le moment !" }
+      ]
+    }
+  ];
 
-      // Message utilisateur
-      const userMsg = document.createElement("div");
-      userMsg.className = "message user";
-      userMsg.textContent = text;
-      messagesEl.appendChild(userMsg);
+  function sendMessage() {
+    const input = document.getElementById("userInput");
+    const text = input.value.trim().toLowerCase();
+    if(text === "") return;
 
-      // Réponse bot
-      const botMsg = document.createElement("div");
-      botMsg.className = "message bot";
+    // Message utilisateur
+    const userMsg = document.createElement("div");
+    userMsg.className = "message user";
+    userMsg.textContent = text;
+    messagesEl.appendChild(userMsg);
 
-      if(scenario[step] && scenario[step].expected.includes(text)) {
-        botMsg.textContent = scenario[step].response;
-        step++; // Passe à l'étape suivante
+    // Réponse bot
+    const botMsg = document.createElement("div");
+    botMsg.className = "message bot";
+
+    if(step < scenario.length) {
+      const options = scenario[step].options;
+      const match = options.find(opt => opt.expected.includes(text));
+
+      if(match) {
+        botMsg.textContent = match.response;
+        step++; // passe à l'étape suivante
       } else {
         botMsg.textContent = "❌ Ce n’est pas le bon moment pour cette décision.";
       }
-
-      messagesEl.appendChild(botMsg);
-
-      // Scroll automatique
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-
-      input.value = "";
-      input.focus();
+    } else {
+      botMsg.textContent = "✅ Vous avez terminé le scénario !";
     }
 
-    // Envoi sur Enter
-    document.getElementById("userInput").addEventListener("keypress", function(e) {
-      if(e.key === "Enter") sendMessage();
-    });
-  </script>
+    messagesEl.appendChild(botMsg);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+
+    input.value = "";
+    input.focus();
+  }
+
+  // Envoi sur Enter
+  document.getElementById("userInput").addEventListener("keypress", function(e) {
+    if(e.key === "Enter") sendMessage();
+  });
+</script>
 
 </body>
 </html>
