@@ -105,8 +105,14 @@
     },
     {
       options: [
-        { expected: ["digue+hélicoptère+emplacement"], response: "Ok, on va faire déplacer cette digue en hélico !" },
-      ]
+        { expected: ["digue+hélico+emplacement"], response: "Ok, on va faire déplacer cette digue en hélico !" },
+        { expected: ["digue+emplacement+hélico"], response: "Ok, on va faire déplacer cette digue en hélico !" },
+        { expected: ["hélico+digue+emplacement"], response: "Ok, on va faire déplacer cette digue en hélico !" },
+        { expected: ["hélico+emplacement+digue"], response: "Ok, on va faire déplacer cette digue en hélico !" },
+        { expected: ["emplacement+digue+hélico"], response: "Ok, on va faire déplacer cette digue en hélico !" },
+        { expected: ["emplacement+hélico+digue"], response: "Ok, on va faire déplacer cette digue en hélico !" }
+      ],
+      intermediate: ["Ok, la digue devrait protéger... Bon maintenant, il faut s'occuper de mettre les habitants à l'abri."]
     },
     {
       options: [
