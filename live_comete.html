@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Vidéo + QR Code</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 20px;
+      max-width: 900px;
+      width: 95%;
+      align-items: center;
+    }
+
+    .video {
+      flex: 2;
+      position: relative;
+      padding-top: 56.25%; /* 16:9 */
+    }
+
+    .video iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+    }
+
+    .qr {
+      flex: 1;
+      text-align: center;
+    }
+
+    .qr img {
+      max-width: 200px;
+      width: 100%;
+    }
+
+    .qr p {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Vidéo YouTube -->
+    <div class="video">
+      <iframe 
+        src="https://www.youtube.com/embed/-K_8he5Asm8"
+        title="YouTube video"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <!-- QR Code -->
+    <div class="qr">
+      <!-- 🔁 Tu peux changer le lien ici -->
+      <img 
+        src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://exemple.com"
+        alt="QR Code">
+      <p>Scannez pour continuer</p>
+    </div>
+
+  </div>
+
+</body>
+</html>
