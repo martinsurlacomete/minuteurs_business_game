@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes Produits - Gestion d'Inventaire</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(to bottom right, #f8fafc, #f0f4f8, #e0e7ff);
+      min-height: 100vh;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.8);
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .header-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    .header-title {
+      margin-bottom: 24px;
+    }
+
+    .header-title h1 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .header-title p {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .stat-card {
+      border-radius: 16px;
+      padding: 16px;
+      color: white;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-monthly {
+      background: linear-gradient(to bottom right, #6366f1, #2563eb);
+    }
+
+    .stat-value {
+      background: linear-gradient(to bottom right, #10b981, #14b8a6);
+    }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    .stat-icon {
+      font-size: 18px;
+    }
+
+    .stat-amount {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 8px 0;
+    }
+
+    .stat-info {
+      font-size: 12px;
+      opacity: 0.75;
+      margin-top: 4px;
+    }
+
+    .main-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 16px;
+    }
+
+    .products-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 0;
+      color: #9ca3af;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e5e7eb;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      justify-content: space-between;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-color: #d1d5db;
+    }
+
+    .product-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .product-name {
+      font-weight: 600;
+      color: #0f172a;
+      font-size: 16px;
+      margin-bottom: 4px;
+      word-break: break-word;
+    }
+
+    .product-category {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .product-prices {
+      display: flex;
+      gap: 16px;
+      font-size: 14px;
+    }
+
+    .price-tag {
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    .price-monthly {
+      background: #eff6ff;
+    }
+
+    .price-monthly strong {
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .price-monthly small {
+      color: #3b82f6;
+      font-size: 11px;
+      margin-left: 4px;
+    }
+
+    .price-value {
+      background: #f0fdf4;
+    }
+
+    .price-value strong {
+      color: #059669;
+      font-weight: 600;
+    }
+
+    .price-value small {
+      color: #10b981;
+      font-size: 11px;
+      margin-left: 4px;
+    }
+
+    .delete-btn {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+      color: #f87171;
+      font-size: 20px;
+      transition: all 0.3s;
+      border-radius: 8px;
+    }
+
+    .delete-btn:hover {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .form-container {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e5e7eb;
+      margin-bottom: 24px;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-title {
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-input,
+    .form-select {
+      padding: 10px 16px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: #818cf8;
+      box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
+      background: white;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .form-btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-submit {
+      background: #4f46e5;
+      color: white;
+    }
+
+    .btn-submit:hover {
+      background: #4338ca;
+    }
+
+    .btn-cancel {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .btn-cancel:hover {
+      background: #e5e7eb;
+    }
+
+    .add-btn {
+      width: 100%;
+      background: linear-gradient(to right, #4f46e5, #2563eb);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+      position: sticky;
+      bottom: 24px;
+      margin-top: 16px;
+    }
+
+    .add-btn:hover {
+      background: linear-gradient(to right, #4338ca, #1d4ed8);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .product-card {
+        flex-direction: column;
+      }
+
+      .product-prices {
+        width: 100%;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-content">
+      <div class="header-title">
+        <h1>Mes Produits</h1>
+        <p>Gestion de votre inventaire</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card stat-monthly">
+          <div class="stat-header">
+            <span class="stat-label">Coût Mensuel</span>
+            <span class="stat-icon">📊</span>
+          </div>
+          <div class="stat-amount" id="totalMonthly">0.00€</div>
+          <div class="stat-info"><span id="productCount">0</span> produits</div>
+        </div>
+
+        <div class="stat-card stat-value">
+          <div class="stat-header">
+            <span class="stat-label">Valeur Totale</span>
+            <span class="stat-icon">💎</span>
+          </div>
+          <div class="stat-amount" id="totalValue">0€</div>
+          <div class="stat-info">Inventaire</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="products-list" id="productsList">
+      <div class="empty-state">Aucun produit pour le moment</div>
+    </div>
+
+    <div class="form-container hidden" id="formContainer">
+      <div class="form-title">Ajouter un produit</div>
+      <div class="form-group">
+        <input type="text" class="form-input" id="productName" placeholder="Nom du produit">
+        <select class="form-select" id="productCategory">
+          <option>Jouets</option>
+          <option>Transport</option>
+          <option>Mobilier</option>
+          <option>Équipement</option>
+          <option>Vêtements</option>
+        </select>
+        <input type="url" class="form-input" id="productImage" placeholder="URL de l'image du produit">
+        <div class="form-row">
+          <input type="number" class="form-input" id="productMonthly" placeholder="Coût mensuel" step="0.01">
+          <input type="number" class="form-input" id="productValue" placeholder="Valeur totale" step="0.01">
+        </div>
+        <div class="form-buttons">
+          <button class="form-btn btn-submit" onclick="addProduct()">Ajouter</button>
+          <button class="form-btn btn-cancel" onclick="toggleForm()">Annuler</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="add-btn" id="addBtn" onclick="toggleForm()">
+      <span>➕</span>
+      <span>Ajouter un produit</span>
+    </button>
+  </div>
+
+  <script>
+    let products = [
+      { id: 1, name: 'Poussette Premium', category: 'Transport', monthlyPrice: 24.99, value: 499, image: 'https://images.unsplash.com/photo-1564484689dc-5353986fe87f?w=200&h=200&fit=crop' },
+      { id: 2, name: 'Jeu de Cubes', category: 'Jeux', monthlyPrice: 8.50, value: 45, image: 'https://images.unsplash.com/photo-1581133573892-44df80d09f6f?w=200&h=200&fit=crop' },
+      { id: 3, name: 'Chaise Haute', category: 'Mobilier', monthlyPrice: 15.00, value: 249, image: 'https://images.unsplash.com/photo-1596760322469-e58b7b2ec46f?w=200&h=200&fit=crop' },
+      { id: 4, name: 'Lit Bébé Convertible', category: 'Mobilier', monthlyPrice: 35.00, value: 699, image: 'https://images.unsplash.com/photo-1596759360695-86dda2e8dd92?w=200&h=200&fit=crop' },
+      { id: 5, name: 'Peluche Musicale', category: 'Jouets', monthlyPrice: 5.99, value: 32, image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=200&h=200&fit=crop' },
+      { id: 6, name: 'Parc de Jeu', category: 'Équipement', monthlyPrice: 12.00, value: 189, image: 'https://images.unsplash.com/photo-1596760320596-e64c6b0854ad?w=200&h=200&fit=crop' },
+    ];
+
+    function toggleForm() {
+      const form = document.getElementById('formContainer');
+      const addBtn = document.getElementById('addBtn');
+      form.classList.toggle('hidden');
+      addBtn.classList.toggle('hidden');
+      if (!form.classList.contains('hidden')) {
+        document.getElementById('productName').focus();
+      }
+    }
+
+    function addProduct() {
+      const name = document.getElementById('productName').value;
+      const category = document.getElementById('productCategory').value;
+      const image = document.getElementById('productImage').value;
+      const monthlyPrice = parseFloat(document.getElementById('productMonthly').value);
+      const value = parseFloat(document.getElementById('productValue').value);
+
+      if (name && image && !isNaN(monthlyPrice) && !isNaN(value)) {
+        products.push({
+          id: Date.now(),
+          name,
+          category,
+          image,
+          monthlyPrice,
+          value
+        });
+        document.getElementById('productName').value = '';
+        document.getElementById('productImage').value = '';
+        document.getElementById('productMonthly').value = '';
+        document.getElementById('productValue').value = '';
+        document.getElementById('productCategory').value = 'Jouets';
+        toggleForm();
+        render();
+      } else {
+        alert('Veuillez remplir tous les champs correctement');
+      }
+    }
+
+    function deleteProduct(id) {
+      products = products.filter(p => p.id !== id);
+      render();
+    }
+
+    function updateStats() {
+      const totalMonthly = products.reduce((sum, p) => sum + p.monthlyPrice, 0);
+      const totalValue = products.reduce((sum, p) => sum + p.value, 0);
+      document.getElementById('totalMonthly').textContent = totalMonthly.toFixed(2) + '€';
+      document.getElementById('totalValue').textContent = totalValue + '€';
+      document.getElementById('productCount').textContent = products.length;
+    }
+
+    function render() {
+      const list = document.getElementById('productsList');
+      if (products.length === 0) {
+        list.innerHTML = '<div class="empty-state">Aucun produit pour le moment</div>';
+      } else {
+        list.innerHTML = products.map(product => `
+          <div class="product-card">
+            <img src="${product.image}" alt="${product.name}" class="product-image">
+            <div class="product-info">
+              <div class="product-name">${product.name}</div>
+              <div class="product-category">${product.category}</div>
+              <div class="product-prices">
+                <div class="price-tag price-monthly">
+                  <strong>${product.monthlyPrice.toFixed(2)}€</strong>
+                  <small>/mois</small>
+                </div>
+                <div class="price-tag price-value">
+                  <strong>${product.value}€</strong>
+                  <small>valeur</small>
+                </div>
+              </div>
+            </div>
+            <button class="delete-btn" onclick="deleteProduct(${product.id})">🗑️</button>
+          </div>
+        `).join('');
+      }
+      updateStats();
+    }
+
+    render();
+  </script>
+</body>
+</html>
